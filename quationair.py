@@ -1,20 +1,23 @@
-
-import pickle
-#questions = []
-#total_user_answers = []
-   
+import pickle   
    #creat a class of question:
-class question():
-    def __init__(self, q , answers ):
-        self.q = q
-        self.answers = answers
-   
     #deine a method to creat the question
-    def new_question():
+def new_question():
         global questions
         file = open('questions.pkl', 'rb')
         questions = pickle.load(file)
         file.close()
+        name = input('whats the name of ur survay?')
+        file = open(name + '.pkl', 'wb')
+        pickle.dump(questions,file)
+        file.close()
+        file = open('survay_name_list.pkl', 'rb')
+        survay_name_list = pickle.load(file)
+        file.close()
+        survay_name_list.append(name)
+        file = open('survay_name_list.pkl', 'wb')
+        pickle.dump(survay_name_list,file)
+        file.close()
+
         y = input("Want to add a question? ")
         while  y == 'y' or y == 'Y':
             q = input("question you want to add to your questionair: ")
@@ -25,17 +28,20 @@ class question():
                 j+1
             question = {q: answers}
             questions.append(question)
-            y = input("for adding another flashcard, press Y/y :")
-            file = open('questions.pkl', 'wb')
+            #print(question)
+            y = input("for adding another Question, press Y/y :")
+            file = open(name + '.pkl', 'wb')
             pickle.dump(questions,file)
             file.close()
     
     #deine a method to ask the question
-    def ask():
-        file = open('questions.pkl', 'rb')
+def ask():
+        c = input('which quationiar do you want to answer? ')
+
+        file = open(c+'.pkl', 'rb')
         questions = pickle.load(file)
         file.close()  
-        file = open('answers.pkl', 'rb')
+        file = open(c+'answers.pkl', 'rb')
         total_user_answers= pickle.load(file)
         file.close()
         for i in range(len(questions)):
@@ -45,14 +51,24 @@ class question():
                 que_ans ={i:answer_of_user}
                 total_user_answers.append(que_ans)
                 i = i + 1
-        file = open('answers.pkl', 'wb')
+        file = open(c+'answers.pkl', 'wb')
         pickle.dump(total_user_answers,file)
         file.close()
-        print(total_user_answers)
+        #print(total_user_answers)
 
    #deine a method to analyse the results
-    def analays():
+def analays():
         pass
-        
-#question.new_question()
-#question.ask()
+
+def run_proramm():
+    b = input('what do you wana do? to creat a Questionair enter q , or to answer enter a or to analyse enter an')
+    if b == 'q':
+        new_question()
+    elif b == 'a':
+        ask()
+    elif b == 'an':
+        analays()
+    else:
+        run_proramm()        
+
+run_proramm()
