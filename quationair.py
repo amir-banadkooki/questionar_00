@@ -2,8 +2,7 @@ import pickle
 #survay_name_list =[]
 #answers_name_list =[]
 
-   #creat a class of question:
-    #deine a method to creat the question
+
 with open('survay_name_list.pkl', 'rb') as file:
     survay_name_list = pickle.load(file)
     file.close()
@@ -13,8 +12,7 @@ with open('answers_name_list.pkl', 'rb') as file:
 
 def new_question():
         global questions
-        name = input('whats the name of ur survay?')
-        
+        name = input('whats the name of ur survay?')        
         if name in survay_name_list :
             with open(name + '.pkl', 'rb') as file:
                 questions =  pickle.load(file)
@@ -86,16 +84,17 @@ def analays():
         pass
 
 def run_proramm():
-    print('what do you wana do? ',"\n" , 
-    'to creat a Questionair enter q' ,"\n" ,
-    ' or to answer enter a ',"\n" , 
-    'or to analyse enter an')
-    b = input()
-    if b == 'q':
+    print(
+    'to creat or modify a Questionair enter  "c"' ,"\n" ,
+    'or to answer enter  "a" ',"\n" , 
+    'or to see the result of the survay enter  "r"',"\n" , 
+    'or to exit enter  "exit"')
+    b = input('what do you wana do?  ')
+    if b == 'c' or b == 'C':
         new_question()
-    elif b == 'a':
+    elif b == 'a' or b == 'A':
         ask()
-    elif b == 'an':
+    elif b == 'r'or b == 'R':
         analays()
     elif b == 'exit' :
         quit
