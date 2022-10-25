@@ -1,29 +1,36 @@
 import pickle   
 #survay_name_list =[]
-#questions = []
+#answers_name_list =[]
+
    #creat a class of question:
     #deine a method to creat the question
+with open('survay_name_list.pkl', 'rb') as file:
+    survay_name_list = pickle.load(file)
+    file.close()
+with open('answers_name_list.pkl', 'rb') as file:
+    answers_name_list = pickle.load(file)
+    file.close()
+
 def new_question():
         global questions
-        
         name = input('whats the name of ur survay?')
-        file = open(name + '.pkl', 'wb')
-        pickle.dump(questions,file)
-        file.close()
-
-        file = open('survay_name_list.pkl', 'rb')
-        survay_name_list = pickle.load(file)
-        file.close()
-
-        survay_name_list.append(name)
-        file = open('survay_name_list.pkl', 'wb')
-        pickle.dump(survay_name_list,file)
-        file.close()
-
-        file = open(name + '.pkl', 'rb')
-        questions =  pickle.load(file)
-        file.close()
-
+        
+        if name in survay_name_list :
+            with open(name + '.pkl', 'rb') as file:
+                questions =  pickle.load(file)
+                file.close()
+        else:
+            questions = [] 
+            survay_name_list.append(name)
+        with open('survay_name_list.pkl', 'wb') as file :
+            pickle.dump(survay_name_list,file)
+            file.close()
+            with open(name + '.pkl', 'wb') as file:
+                pickle.dump(questions,file)
+                file.close()
+            with open(name + '.pkl', 'rb') as file :
+                questions =  pickle.load(file)
+                file.close()
         y = input("Want to add a question? ")
         while  y == 'y' or y == 'Y':
             q = input("question you want to add to your questionair: ")
@@ -39,16 +46,31 @@ def new_question():
             file = open(name + '.pkl', 'wb')
             pickle.dump(questions,file)
             file.close()
-    
-    #deine a method to ask the question
+
 def ask():
+        print('here is the list of ongoing survays: ',"\n" ,survay_name_list)
         c = input('which quationiar do you want to answer? ')
-        file = open(c+'.pkl', 'rb')
-        questions = pickle.load(file)
-        file.close()  
-        file = open(c+'answers.pkl', 'rb')
-        total_user_answers= pickle.load(file)
-        file.close()
+        with open(c+'.pkl', 'rb') as file :
+            questions = pickle.load(file)
+            file.close()  
+
+        if c in answers_name_list :
+            with open(c+'answers.pkl', 'rb') as file:
+                total_user_answers= pickle.load(file)
+                file.close()
+        else:
+            total_user_answers =[]
+            answers_name_list.append(c)
+            with open('answers_name_list.pkl','wb') as file:
+                pickle.dump(answers_name_list,file)
+                file.close()
+            with open(c+'answers.pkl', 'wb') as file:
+                pickle.dump(total_user_answers,file)
+                file.close()
+            with open(c+'answers.pkl', 'rb') as file:
+                total_user_answers= pickle.load(file)
+                file.close()    
+                
         for i in range(len(questions)):
             for key,Value in questions[i].items():
                 print(key, "  " ,"\n" ,Value)
@@ -56,23 +78,27 @@ def ask():
                 que_ans ={i:answer_of_user}
                 total_user_answers.append(que_ans)
                 i = i + 1
-        file = open(c+'answers.pkl', 'wb')
-        pickle.dump(total_user_answers,file)
-        file.close()
-        #print(total_user_answers)
-
+            with open(c+'answers.pkl', 'wb') as file:
+                pickle.dump(total_user_answers,file)
+                file.close()
    #deine a method to analyse the results
 def analays():
         pass
 
 def run_proramm():
-    b = input('what do you wana do? to creat a Questionair enter q , or to answer enter a or to analyse enter an')
+    print('what do you wana do? ',"\n" , 
+    'to creat a Questionair enter q' ,"\n" ,
+    ' or to answer enter a ',"\n" , 
+    'or to analyse enter an')
+    b = input()
     if b == 'q':
         new_question()
     elif b == 'a':
         ask()
     elif b == 'an':
         analays()
+    elif b == 'exit' :
+        quit
     else:
         run_proramm()        
 
