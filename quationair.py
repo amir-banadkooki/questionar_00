@@ -1,21 +1,27 @@
 import pickle   
+#survay_name_list =[]
+#questions = []
    #creat a class of question:
     #deine a method to creat the question
 def new_question():
         global questions
-        file = open('questions.pkl', 'rb')
-        questions = pickle.load(file)
-        file.close()
+        
         name = input('whats the name of ur survay?')
         file = open(name + '.pkl', 'wb')
         pickle.dump(questions,file)
         file.close()
+
         file = open('survay_name_list.pkl', 'rb')
         survay_name_list = pickle.load(file)
         file.close()
+
         survay_name_list.append(name)
         file = open('survay_name_list.pkl', 'wb')
         pickle.dump(survay_name_list,file)
+        file.close()
+
+        file = open(name + '.pkl', 'rb')
+        questions =  pickle.load(file)
         file.close()
 
         y = input("Want to add a question? ")
@@ -37,7 +43,6 @@ def new_question():
     #deine a method to ask the question
 def ask():
         c = input('which quationiar do you want to answer? ')
-
         file = open(c+'.pkl', 'rb')
         questions = pickle.load(file)
         file.close()  
