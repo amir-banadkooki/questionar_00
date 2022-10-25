@@ -1,7 +1,12 @@
 import pickle   
 #survay_name_list =[]
 #answers_name_list =[]
-
+#with open('answers_name_list.pkl', 'wb') as file:
+#    pickle.dump(answers_name_list,file)
+#    file.close()
+#with open('survay_name_list.pkl', 'wb') as file:
+#    pickle.dump(answers_name_list,file)
+#    file.close()
 
 with open('survay_name_list.pkl', 'rb') as file:
     survay_name_list = pickle.load(file)
@@ -20,10 +25,10 @@ def new_question():
         else:
             questions = [] 
             survay_name_list.append(name)
-        with open('survay_name_list.pkl', 'wb') as file :
-            pickle.dump(survay_name_list,file)
-            file.close()
-            with open(name + '.pkl', 'wb') as file:
+            with open('survay_name_list.pkl', 'wb') as file :
+                pickle.dump(survay_name_list,file)
+                file.close()
+            with open(name+'.pkl', 'wb') as file:
                 pickle.dump(questions,file)
                 file.close()
             with open(name + '.pkl', 'rb') as file :
@@ -53,7 +58,7 @@ def ask():
             file.close()  
 
         if c in answers_name_list :
-            with open(c+'answers.pkl', 'rb') as file:
+            with open(c+'_answers.pkl', 'rb') as file:
                 total_user_answers= pickle.load(file)
                 file.close()
         else:
@@ -62,26 +67,44 @@ def ask():
             with open('answers_name_list.pkl','wb') as file:
                 pickle.dump(answers_name_list,file)
                 file.close()
-            with open(c+'answers.pkl', 'wb') as file:
+            with open(c+'_answers.pkl', 'wb') as file:
                 pickle.dump(total_user_answers,file)
                 file.close()
-            with open(c+'answers.pkl', 'rb') as file:
+            with open(c+'_answers.pkl', 'rb') as file:
                 total_user_answers= pickle.load(file)
                 file.close()    
-                
-        for i in range(len(questions)):
-            for key,Value in questions[i].items():
+        for i in questions:
+            for key,Value in i.items():
                 print(key, "  " ,"\n" ,Value)
-                answer_of_user= input('what is your choice?')
-                que_ans ={i:answer_of_user}
-                total_user_answers.append(que_ans)
-                i = i + 1
-            with open(c+'answers.pkl', 'wb') as file:
-                pickle.dump(total_user_answers,file)
-                file.close()
-   #deine a method to analyse the results
+            user_answer = input('chi zer mizani to? ')
+            for key,value in i.items():
+                for k,v in value.items():
+                    if k== int(user_answer) :
+                        que_ans = {key: v}
+                        total_user_answers.append(que_ans)
+        with open(c+'_answers.pkl', 'wb') as file:
+            pickle.dump(total_user_answers,file)
+            file.close()
+
 def analays():
-        pass
+    print('here is the list of ongoing survays: ',"\n" ,survay_name_list)
+    d = input('which quationiar analyse do you want to see? ')
+    with open(d+'_answers.pkl', 'rb') as file:
+        total_user_answers= pickle.load(file)
+        file.close()
+        b = []
+        for i in total_user_answers :
+            if i not in b :
+                b.append(i)
+        result=[]
+        for i in b :
+            counter = 0
+            for j in total_user_answers :
+                if j == i :
+                    counter +=1
+            result.append((i,counter))
+    for i in result:
+        print(i) 
 
 def run_proramm():
     print(
